@@ -40,8 +40,18 @@ export async function POST() {
           controller.close()
           return
         }
-        await supabaseServer.from('cooling_state').insert(coolingRows)
-        await supabaseServer.from('energy_prices').insert(priceRows)
+        const { error: cErr } = await supabaseServer.from('cooling_state').insert(coolingRows)
+        if (cErr) {
+          controller.enqueue(encoder.encode(JSON.stringify({ error: cErr.message }) + '\n'))
+          controller.close()
+          return
+        }
+        const { error: pErr } = await supabaseServer.from('energy_prices').insert(priceRows)
+        if (pErr) {
+          controller.enqueue(encoder.encode(JSON.stringify({ error: pErr.message }) + '\n'))
+          controller.close()
+          return
+        }
 
         seeded += chunkTicks.length
         controller.enqueue(encoder.encode(
