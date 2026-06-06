@@ -33,7 +33,8 @@ export async function POST() {
       }))
 
     if (alertRows.length > 0) {
-      await supabaseServer.from('alerts').insert(alertRows)
+      const { error: alertErr } = await supabaseServer.from('alerts').insert(alertRows)
+      if (alertErr) throw alertErr
     }
 
     return NextResponse.json(tick)
