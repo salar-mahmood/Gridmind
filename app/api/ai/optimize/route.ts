@@ -21,18 +21,22 @@ export async function POST() {
       )
     )
 
-    const { data: cooling } = await supabaseServer
+    const { data: cooling, error: coolingErr } = await supabaseServer
       .from('cooling_state')
       .select('*')
       .order('timestamp', { ascending: false })
       .limit(4)
 
-    const { data: price } = await supabaseServer
+    if (coolingErr) throw coolingErr
+
+    const { data: price, error: priceErr } = await supabaseServer
       .from('energy_prices')
       .select('*')
       .order('timestamp', { ascending: false })
       .limit(1)
       .single()
+
+    if (priceErr) throw priceErr
 
     const snapshot = {
       servers: serverRows.filter(Boolean),
