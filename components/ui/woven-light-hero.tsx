@@ -102,8 +102,8 @@ const WovenCanvas = () => {
     const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     // --- Scanlines ---
-    const numLines = 50;
-    const particlesPerLine = 300;
+    const numLines = 45;
+    const particlesPerLine = 120;
     const particleCount = numLines * particlesPerLine;
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
@@ -142,7 +142,7 @@ const WovenCanvas = () => {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 0.012,
+        size: 0.005,
         vertexColors: true,
         blending: isDarkMode ? THREE.NormalBlending : THREE.AdditiveBlending,
         transparent: true,
@@ -173,11 +173,13 @@ const WovenCanvas = () => {
             const originalPos = new THREE.Vector3(originalPositions[ix], originalPositions[iy], originalPositions[iz]);
             const velocity = new THREE.Vector3(velocities[ix], velocities[iy], velocities[iz]);
 
-            const dist = currentPos.distanceTo(mouseWorld);
-            if (dist < 1.0) {
-                const force = (1.0 - dist) * 0.004;
-                const direction = new THREE.Vector3().subVectors(currentPos, mouseWorld).normalize();
-                velocity.add(direction.multiplyScalar(force));
+            const dist2d = Math.sqrt(
+                (positions[ix] - mouseWorld.x) ** 2 +
+                (positions[iy] - mouseWorld.y) ** 2
+            );
+            if (dist2d < 1.0) {
+                const force = (1.0 - dist2d) * 0.012;
+                velocity.z += force;
             }
 
             // Return to original position
