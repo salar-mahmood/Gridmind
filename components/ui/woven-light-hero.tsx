@@ -114,7 +114,6 @@ const WovenCanvas = () => {
 
     for (let line = 0; line < numLines; line++) {
         const y = -2.3 + (line / (numLines - 1)) * 4.6;
-        const hue = line / numLines;
         for (let p = 0; p < particlesPerLine; p++) {
             const i = line * particlesPerLine + p;
             const x = -4.5 + (p / (particlesPerLine - 1)) * 9.0;
@@ -127,7 +126,7 @@ const WovenCanvas = () => {
             originalPositions[i * 3 + 2] = 0;
 
             const color = new THREE.Color();
-            color.setHSL(hue, 0.9, isDarkMode ? 0.5 : 0.7);
+            color.setHSL(0, 0, 0.55);
             colors[i * 3] = color.r;
             colors[i * 3 + 1] = color.g;
             colors[i * 3 + 2] = color.b;
@@ -142,7 +141,7 @@ const WovenCanvas = () => {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 0.005,
+        size: 0.01,
         vertexColors: true,
         blending: isDarkMode ? THREE.NormalBlending : THREE.AdditiveBlending,
         transparent: true,
@@ -178,7 +177,7 @@ const WovenCanvas = () => {
                 (positions[iy] - mouseWorld.y) ** 2
             );
             if (dist2d < 1.0) {
-                const force = (1.0 - dist2d) * 0.012;
+                const force = (1.0 - dist2d) * 0.003;
                 velocity.z += force;
             }
 
