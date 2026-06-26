@@ -53,7 +53,7 @@ export default function SchedulerPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Workload Scheduler</h1>
+          <h1 className="text-2xl font-bold text-white font-playfair">Workload Scheduler</h1>
           <p className="text-sm text-slate-500 mt-1">
             Green bands = optimal windows (low price + high renewable)
           </p>
@@ -68,7 +68,7 @@ export default function SchedulerPage() {
       </div>
 
       {result && (
-        <div className="bg-emerald-900/20 border border-emerald-800 rounded-xl p-4 grid grid-cols-3 gap-4 text-sm">
+        <div className="bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md rounded-xl p-4 grid grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-slate-400">Before</p>
             <p className="text-lg font-bold text-white">${result.beforeCost.toFixed(4)}/h</p>

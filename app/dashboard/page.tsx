@@ -1,12 +1,15 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import { MetricCard } from '@/components/dashboard/MetricCard'
 import { RackHeatmap } from '@/components/dashboard/RackHeatmap'
 import { PowerChart } from '@/components/dashboard/PowerChart'
 import { InsightFeed } from '@/components/dashboard/InsightFeed'
 import type { TelemetrySnapshot, GridMindSettings } from '@/lib/types'
 import { DEFAULT_SETTINGS } from '@/lib/types'
+
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
 
 function getSettings(): GridMindSettings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS
@@ -83,17 +86,22 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Operations Dashboard</h1>
+        <h1 className="text-2xl font-bold text-white font-playfair">Operations Dashboard</h1>
         <p className="text-sm text-slate-500 mt-1">Live telemetry — refreshes every 30s</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <MetricCard label="Total Power Draw" value={totalPowerKw.toFixed(1)} unit="kW" variant="blue" />
-        <MetricCard label="PUE" value={pue.toFixed(3)} variant="green" />
-        <MetricCard label="Cooling Load" value={coolingPowerKw.toFixed(1)} unit="kW" variant="blue" />
-        <MetricCard label="Est. Monthly Cost" value={`$${monthlyCost.toFixed(0)}`} variant="amber" />
-        <MetricCard label="CO₂ Footprint" value={co2Kg.toFixed(0)} unit="kg/mo" variant="red" />
-      </div>
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-2 md:grid-cols-5 gap-3"
+      >
+        <MetricCard label="Total Power Draw" value={totalPowerKw.toFixed(1)} unit="kW" variant="blue" index={0} />
+        <MetricCard label="PUE" value={pue.toFixed(3)} variant="green" index={1} />
+        <MetricCard label="Cooling Load" value={coolingPowerKw.toFixed(1)} unit="kW" variant="blue" index={2} />
+        <MetricCard label="Est. Monthly Cost" value={`$${monthlyCost.toFixed(0)}`} variant="amber" index={3} />
+        <MetricCard label="CO₂ Footprint" value={co2Kg.toFixed(0)} unit="kg/mo" variant="red" index={4} />
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">

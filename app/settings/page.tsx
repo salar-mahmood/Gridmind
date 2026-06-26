@@ -23,10 +23,10 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6 max-w-xl">
-      <h1 className="text-2xl font-bold text-white">Settings</h1>
+      <h1 className="text-2xl font-bold text-white font-playfair">Settings</h1>
 
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 space-y-5">
-        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">Energy Configuration</h2>
+      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-5">
+        <h2 className="text-sm font-semibold text-white/60 uppercase tracking-wide">Energy Configuration</h2>
 
         <div>
           <label className="block text-sm text-slate-400 mb-1">Electricity Cost ($/kWh)</label>
@@ -37,7 +37,7 @@ export default function SettingsPage() {
             max="2"
             value={settings.electricityCostPerKwh}
             onChange={e => setSettings(s => ({ ...s, electricityCostPerKwh: parseFloat(e.target.value) }))}
-            className="bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm w-full"
+            className="bg-white/5 border border-white/10 text-white rounded-lg px-3 py-2 text-sm w-full backdrop-blur-sm"
           />
           <p className="text-xs text-slate-500 mt-1">Used to calculate monthly cost and cost savings on the dashboard</p>
         </div>
@@ -51,12 +51,12 @@ export default function SettingsPage() {
             max="2"
             value={settings.co2Factor}
             onChange={e => setSettings(s => ({ ...s, co2Factor: parseFloat(e.target.value) }))}
-            className="bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm w-full"
+            className="bg-white/5 border border-white/10 text-white rounded-lg px-3 py-2 text-sm w-full backdrop-blur-sm"
           />
           <p className="text-xs text-slate-500 mt-1">Applied to all CO₂ calculations including reports and AI summaries</p>
         </div>
 
-        <div className="rounded-lg bg-slate-800 border border-slate-700 p-4 text-sm">
+        <div className="rounded-lg bg-white/5 border border-white/10 p-4 text-sm">
           <p className="text-slate-400 font-medium mb-1">Alert Thresholds (v1 hardcoded)</p>
           <ul className="text-slate-500 text-xs space-y-1">
             <li>• Temperature: 80°C (critical alert)</li>
@@ -64,7 +64,7 @@ export default function SettingsPage() {
           </ul>
         </div>
 
-        <div className="rounded-lg bg-slate-800 border border-slate-700 p-4 text-sm">
+        <div className="rounded-lg bg-white/5 border border-white/10 p-4 text-sm">
           <p className="text-slate-400 font-medium mb-1">AI Analysis Frequency</p>
           <p className="text-slate-500 text-xs">Manual (trigger from /optimize page). Scheduled intervals coming in v2.</p>
         </div>

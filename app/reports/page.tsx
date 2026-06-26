@@ -59,7 +59,7 @@ export default function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">Energy Reports</h1>
+      <h1 className="text-2xl font-bold text-white font-playfair">Energy Reports</h1>
 
       <div className="flex gap-3 items-end flex-wrap">
         <div>
@@ -68,7 +68,7 @@ export default function ReportsPage() {
             type="date"
             value={startDate}
             onChange={e => setStartDate(e.target.value)}
-            className="bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm"
+            className="bg-white/5 border border-white/10 backdrop-blur-md text-white rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
@@ -77,7 +77,7 @@ export default function ReportsPage() {
             type="date"
             value={endDate}
             onChange={e => setEndDate(e.target.value)}
-            className="bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm"
+            className="bg-white/5 border border-white/10 backdrop-blur-md text-white rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <button
@@ -100,7 +100,7 @@ export default function ReportsPage() {
               { label: 'CO₂',          curr: c.total_co2_kg,   prior: p.total_co2_kg,   unit: ' kg',  lower: true },
               { label: 'Renewable %',  curr: c.renewable_pct,  prior: p.renewable_pct,  unit: '%',    lower: false },
             ].map(({ label, curr, prior, unit, lower }) => (
-              <div key={label} className="rounded-xl border border-slate-800 bg-slate-900 p-3">
+              <div key={label} className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-3">
                 <p className="text-xs text-slate-400">{label}</p>
                 <p className="text-xl font-bold text-white mt-1">{curr.toFixed(1)}{unit}</p>
                 <p className={`text-xs mt-1 ${trendColor(curr, prior, lower)}`}>
@@ -114,7 +114,7 @@ export default function ReportsPage() {
             <button
               onClick={generateSummary}
               disabled={summaryLoading}
-              className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 cursor-pointer transition-colors"
+              className="bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 cursor-pointer transition-colors"
             >
               {summaryLoading ? (
                 <>
@@ -126,7 +126,7 @@ export default function ReportsPage() {
           </div>
 
           {summary && (
-            <div className="rounded-xl border border-slate-700 bg-slate-900 p-6">
+            <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-6">
               <h3 className="text-sm font-semibold text-blue-400 mb-4 uppercase tracking-wide">Executive Summary</h3>
               <div className="space-y-3">
                 {summary.split('\n\n').map((para, i) => (

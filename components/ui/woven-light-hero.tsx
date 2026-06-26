@@ -10,12 +10,6 @@ export const WovenLightHero = () => {
   const buttonControls = useAnimation();
 
   useEffect(() => {
-    // Add a more elegant font
-    const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400&display=swap';
-    link.rel = 'stylesheet';
-    document.head.appendChild(link);
-
     textControls.start(i => ({
       opacity: 1,
       y: 0,
@@ -30,9 +24,6 @@ export const WovenLightHero = () => {
         transition: { delay: 2.5, duration: 1 }
     });
 
-    return () => {
-        document.head.removeChild(link);
-    }
   }, [textControls, buttonControls]);
 
   const headline = "GridMind";

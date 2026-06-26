@@ -18,7 +18,7 @@ export function PowerChart() {
   }, [range])
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+    <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-slate-400">Power Consumption</h3>
         <div className="flex gap-1">
@@ -35,7 +35,7 @@ export function PowerChart() {
       </div>
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
           <XAxis
             dataKey="timestamp"
             tick={{ fontSize: 10, fill: '#64748b' }}
@@ -43,7 +43,7 @@ export function PowerChart() {
           />
           <YAxis tick={{ fontSize: 10, fill: '#64748b' }} unit=" kW" />
           <Tooltip
-            contentStyle={{ background: '#1e293b', border: '1px solid #334155', color: '#e2e8f0' }}
+            contentStyle={{ background: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', color: '#e2e8f0' }}
             formatter={(v) => [`${Number(v).toFixed(1)} kW`]}
           />
           <Line type="monotone" dataKey="total_kw" stroke="#3b82f6" dot={false} strokeWidth={2} name="IT Power" />
