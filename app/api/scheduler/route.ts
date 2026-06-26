@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { getPriceAt, getRenewableAt } from '@/lib/telemetry-sim'
 import { supabaseServer } from '@/lib/supabase-server'

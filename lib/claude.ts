@@ -1,10 +1,22 @@
 import Anthropic from '@anthropic-ai/sdk'
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error('Missing ANTHROPIC_API_KEY')
+let _instance: Anthropic | null = null
+
+function getInstance(): Anthropic {
+  if (!_instance) {
+    const key = process.env.ANTHROPIC_API_KEY
+    if (!key) throw new Error('Missing ANTHROPIC_API_KEY')
+    _instance = new Anthropic({ apiKey: key })
+  }
+  return _instance
 }
 
-export const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+// Lazy proxy — client is created on first use, not at import time.
+export const anthropic = new Proxy({} as Anthropic, {
+  get(_, prop) {
+    return (getInstance() as unknown as Record<string | symbol, unknown>)[prop]
+  },
+})
 
 export const MODEL = 'claude-sonnet-4-6'
 
