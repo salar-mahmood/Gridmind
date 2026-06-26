@@ -98,42 +98,44 @@ const WovenCanvas = () => {
     mountRef.current.appendChild(renderer.domElement);
 
     const mouse = new THREE.Vector2(0, 0);
-    const clock = new THREE.Clock();
 
     const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    // --- Woven Silk ---
-    const particleCount = 50000;
+    // --- Scanlines ---
+    const numLines = 50;
+    const particlesPerLine = 1000;
+    const particleCount = numLines * particlesPerLine;
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
 
     const geometry = new THREE.BufferGeometry();
-    const torusKnot = new THREE.TorusKnotGeometry(2.8, 0.8, 200, 32);
 
-    for (let i = 0; i < particleCount; i++) {
-        const vertexIndex = i % torusKnot.attributes.position.count;
-        const x = torusKnot.attributes.position.getX(vertexIndex);
-        const y = torusKnot.attributes.position.getY(vertexIndex);
-        const z = torusKnot.attributes.position.getZ(vertexIndex);
+    for (let line = 0; line < numLines; line++) {
+        const y = -2.3 + (line / (numLines - 1)) * 4.6;
+        const hue = line / numLines;
+        for (let p = 0; p < particlesPerLine; p++) {
+            const i = line * particlesPerLine + p;
+            const x = -4.5 + (p / (particlesPerLine - 1)) * 9.0;
 
-        positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
-        originalPositions[i * 3] = x;
-        originalPositions[i * 3 + 1] = y;
-        originalPositions[i * 3 + 2] = z;
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = 0;
+            originalPositions[i * 3] = x;
+            originalPositions[i * 3 + 1] = y;
+            originalPositions[i * 3 + 2] = 0;
 
-        const color = new THREE.Color();
-        color.setHSL(Math.random(), 0.8, isDarkMode ? 0.5 : 0.7);
-        colors[i * 3] = color.r;
-        colors[i * 3 + 1] = color.g;
-        colors[i * 3 + 2] = color.b;
+            const color = new THREE.Color();
+            color.setHSL(hue, 0.9, isDarkMode ? 0.5 : 0.7);
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
 
-        velocities[i * 3] = 0;
-        velocities[i * 3 + 1] = 0;
-        velocities[i * 3 + 2] = 0;
+            velocities[i * 3] = 0;
+            velocities[i * 3 + 1] = 0;
+            velocities[i * 3 + 2] = 0;
+        }
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -159,7 +161,6 @@ const WovenCanvas = () => {
     let animationId: number;
     const animate = () => {
         animationId = requestAnimationFrame(animate);
-        const elapsedTime = clock.getElapsedTime();
 
         const mouseWorld = new THREE.Vector3(mouse.x * 3, mouse.y * 3, 0);
 
@@ -196,7 +197,6 @@ const WovenCanvas = () => {
         }
         geometry.attributes.position.needsUpdate = true;
 
-        points.rotation.y = elapsedTime * 0.05;
         renderer.render(scene, camera);
     };
     animate();
