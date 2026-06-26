@@ -103,7 +103,7 @@ const WovenCanvas = () => {
 
     // --- Scanlines ---
     const numLines = 50;
-    const particlesPerLine = 1000;
+    const particlesPerLine = 300;
     const particleCount = numLines * particlesPerLine;
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
@@ -142,7 +142,7 @@ const WovenCanvas = () => {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 0.02,
+        size: 0.012,
         vertexColors: true,
         blending: isDarkMode ? THREE.NormalBlending : THREE.AdditiveBlending,
         transparent: true,
@@ -174,8 +174,8 @@ const WovenCanvas = () => {
             const velocity = new THREE.Vector3(velocities[ix], velocities[iy], velocities[iz]);
 
             const dist = currentPos.distanceTo(mouseWorld);
-            if (dist < 1.5) {
-                const force = (1.5 - dist) * 0.01;
+            if (dist < 1.0) {
+                const force = (1.0 - dist) * 0.004;
                 const direction = new THREE.Vector3().subVectors(currentPos, mouseWorld).normalize();
                 velocity.add(direction.multiplyScalar(force));
             }
