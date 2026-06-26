@@ -32,7 +32,7 @@ export function RecommendationCard({ rec, onApply, onDismiss }: Props) {
 
       <p className="text-sm text-slate-200">{rec.description}</p>
 
-      <div className="bg-white/5 rounded-lg p-3 border border-white/10 text-xs text-slate-300 border-l-2 border-blue-500">
+      <div className="bg-white/5 rounded-lg p-3 border border-white/10 text-xs text-slate-300">
         <span className="text-blue-400 font-semibold">Action: </span>{rec.action}
       </div>
 
