@@ -176,8 +176,8 @@ const WovenCanvas = () => {
                 (positions[ix] - mouseWorld.x) ** 2 +
                 (positions[iy] - mouseWorld.y) ** 2
             );
-            if (dist2d < 0.06) {
-                const force = (0.06 - dist2d) * 0.004;
+            if (dist2d < 0.18) {
+                const force = (0.18 - dist2d) * 0.02;
                 velocity.z += force;
             }
 
