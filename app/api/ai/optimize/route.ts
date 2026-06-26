@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase-server'
-import { anthropic, MODEL, OPTIMIZATION_SYSTEM_PROMPT } from '@/lib/claude'
 import { RecommendationsArraySchema } from '@/lib/validations'
 import { SERVERS } from '@/lib/telemetry-sim'
+
+const MOCK_RECOMMENDATIONS = [
+  { type: 'cooling_adjustment', priority: 'high', description: 'rack-A servers are running at 72°C average — reduce CRAC setpoint by 2°C to prevent thermal throttling.', action: 'Set CRAC-1 setpoint from 22°C to 20°C', estimated_kwh_savings: 18.4, estimated_usd_savings: 2.21, confidence: 0.87 },
+  { type: 'workload_shift', priority: 'medium', description: 'Energy prices drop to $0.062/kWh between 02:00–05:00. Shift 4 training jobs to this window for significant cost reduction.', action: 'Reschedule srv-03, srv-07 training workloads to 02:00–05:00', estimated_kwh_savings: 42.0, estimated_usd_savings: 5.04, confidence: 0.91 },
+  { type: 'server_consolidation', priority: 'low', description: 'srv-12 and srv-15 are running at 8% CPU with idle workloads. Consolidate onto a single server to save power.', action: 'Migrate workloads from srv-15 to srv-12 and power down srv-15', estimated_kwh_savings: 9.6, estimated_usd_savings: 1.15, confidence: 0.74 },
+  { type: 'cooling_adjustment', priority: 'medium', description: 'Renewable energy availability peaks at 68% between 11:00–14:00. Schedule high-compute jobs during this window to reduce carbon footprint.', action: 'Move inference batch jobs to 11:00–14:00 slot', estimated_kwh_savings: 0, estimated_usd_savings: 0, confidence: 0.82 },
+  { type: 'alert', priority: 'critical', description: 'srv-04 power draw has exceeded 420W threshold for the past 3 ticks — potential hardware fault or runaway process.', action: 'Inspect srv-04 immediately and check for runaway processes', estimated_kwh_savings: 0, estimated_usd_savings: 0, confidence: 0.96 },
+  { type: 'workload_shift', priority: 'high', description: 'PUE is currently 1.82 — above target of 1.5. Redistribute rack-D workloads to improve airflow and reduce cooling overhead.', action: 'Rebalance rack-D server loads to achieve ≤70% utilization', estimated_kwh_savings: 31.2, estimated_usd_savings: 3.74, confidence: 0.79 },
+]
 
 export async function POST() {
   try {
@@ -45,36 +53,34 @@ export async function POST() {
       analyzed_at: new Date().toISOString(),
     }
 
-    const message = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: 4096,
-      system: OPTIMIZATION_SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: JSON.stringify(snapshot) }],
-    })
+    let recommendations: Array<{ type: string; priority: string; description: string; action: string; estimated_kwh_savings: number; estimated_usd_savings: number; confidence: number }>
 
-    const text = message.content.find(b => b.type === 'text')?.text ?? ''
+    if (!process.env.ANTHROPIC_API_KEY) {
+      recommendations = [...MOCK_RECOMMENDATIONS]
+    } else {
+      const { anthropic, MODEL, OPTIMIZATION_SYSTEM_PROMPT } = await import('@/lib/claude')
+      const message = await anthropic.messages.create({
+        model: MODEL,
+        max_tokens: 4096,
+        system: OPTIMIZATION_SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: JSON.stringify(snapshot) }],
+      })
 
-    let parsed: unknown
-    try {
-      parsed = JSON.parse(text)
-    } catch {
-      return NextResponse.json(
-        { error: 'Claude returned non-JSON', raw: text.slice(0, 500) },
-        { status: 422 }
-      )
-    }
-
-    const result = RecommendationsArraySchema.safeParse(parsed)
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Invalid AI response schema', details: result.error.format(), raw: text.slice(0, 500) },
-        { status: 422 }
-      )
+      const text = message.content.find(b => b.type === 'text')?.text ?? ''
+      let parsed: unknown
+      try { parsed = JSON.parse(text) } catch {
+        return NextResponse.json({ error: 'Claude returned non-JSON', raw: text.slice(0, 500) }, { status: 422 })
+      }
+      const result = RecommendationsArraySchema.safeParse(parsed)
+      if (!result.success) {
+        return NextResponse.json({ error: 'Invalid AI response schema', details: result.error.format() }, { status: 422 })
+      }
+      recommendations = result.data
     }
 
     const { data: inserted, error: insertErr } = await supabaseServer
       .from('ai_recommendations')
-      .insert(result.data)
+      .insert(recommendations)
       .select()
 
     if (insertErr) throw insertErr

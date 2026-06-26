@@ -22,7 +22,8 @@ export default function AlertsPage() {
       Object.entries(filters).filter(([, v]) => v !== '')
     )
     const res = await fetch(`/api/alerts?${params}`)
-    setAlerts(await res.json())
+    const data = await res.json()
+    if (Array.isArray(data)) setAlerts(data)
     setLoading(false)
   }
 

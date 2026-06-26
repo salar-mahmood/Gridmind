@@ -16,7 +16,10 @@ export default function SchedulerPage() {
   const [result, setResult] = useState<{ beforeCost: number; afterCost: number; savingsUsd: number } | null>(null)
 
   useEffect(() => {
-    fetch('/api/scheduler').then(r => r.json()).then(setData).catch(console.error)
+    fetch('/api/scheduler')
+      .then(r => r.json())
+      .then(d => { if (d?.priceData && d?.optimalWindows) setData(d) })
+      .catch(console.error)
   }, [])
 
   const applySchedule = async () => {

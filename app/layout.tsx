@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { Nav } from '@/components/shared/Nav'
+import { AppShell } from '@/components/shared/AppShell'
 import './globals.css'
 
 const geistSans = localFont({
@@ -23,8 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-slate-950 text-slate-200 antialiased">
-        <Nav />
-        <main className="max-w-screen-2xl mx-auto px-4 py-6">{children}</main>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   )
