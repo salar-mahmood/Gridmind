@@ -1,8 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import type { AiRecommendation } from '@/lib/types'
 import { RecommendationCard } from '@/components/optimize/RecommendationCard'
+
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
+const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.2, 0.65, 0.3, 0.9] } } }
 
 export default function OptimizePage() {
   const [recs, setRecs] = useState<AiRecommendation[]>([])
@@ -42,7 +46,7 @@ export default function OptimizePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">AI Optimization Engine</h1>
+          <h1 className="text-2xl font-bold text-white font-playfair">AI Optimization Engine</h1>
           {lastRun && <p className="text-sm text-slate-500 mt-1">Last analysis: {lastRun.toLocaleTimeString()}</p>}
         </div>
         <button
@@ -60,36 +64,37 @@ export default function OptimizePage() {
       </div>
 
       {error && (
-        <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 text-red-400 text-sm">{error}</div>
+        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-red-400 text-sm">{error}</div>
       )}
 
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-slate-800 bg-slate-900 p-4 space-y-3 animate-pulse">
-              <div className="h-4 bg-slate-800 rounded w-1/3" />
-              <div className="h-3 bg-slate-800 rounded w-full" />
-              <div className="h-3 bg-slate-800 rounded w-4/5" />
+            <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3 animate-pulse">
+              <div className="h-4 bg-white/10 rounded w-1/3" />
+              <div className="h-3 bg-white/10 rounded w-full" />
+              <div className="h-3 bg-white/10 rounded w-4/5" />
             </div>
           ))}
         </div>
       )}
 
       {!loading && recs.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recs.map(rec => (
-            <RecommendationCard
-              key={rec.id}
-              rec={rec}
-              onApply={id => updateStatus(id, 'applied')}
-              onDismiss={id => updateStatus(id, 'dismissed')}
-            />
+        <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recs.map((rec) => (
+            <motion.div key={rec.id} variants={item}>
+              <RecommendationCard
+                rec={rec}
+                onApply={id => updateStatus(id, 'applied')}
+                onDismiss={id => updateStatus(id, 'dismissed')}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {!loading && recs.length === 0 && !error && (
-        <div className="text-center py-20 text-slate-600">
+        <div className="text-center py-20 text-white/20">
           <p className="text-lg">Click &quot;Run Analysis&quot; to generate AI recommendations</p>
         </div>
       )}
