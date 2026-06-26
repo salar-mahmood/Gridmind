@@ -91,7 +91,7 @@ const WovenCanvas = () => {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.z = 3;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -110,7 +110,7 @@ const WovenCanvas = () => {
     const velocities = new Float32Array(particleCount * 3);
 
     const geometry = new THREE.BufferGeometry();
-    const torusKnot = new THREE.TorusKnotGeometry(1.5, 0.5, 200, 32);
+    const torusKnot = new THREE.TorusKnotGeometry(2.8, 0.8, 200, 32);
 
     for (let i = 0; i < particleCount; i++) {
         const vertexIndex = i % torusKnot.attributes.position.count;
