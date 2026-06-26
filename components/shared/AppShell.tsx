@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Nav } from './Nav'
+import { ParticleBackground } from './ParticleBackground'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -12,6 +13,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <ParticleBackground />
       <Nav />
       <motion.main
         key={pathname}
