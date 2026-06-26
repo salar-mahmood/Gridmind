@@ -31,7 +31,7 @@ export function RackHeatmap({ servers }: Props) {
                       tempColor(s.temp_c)
                     )}
                   >
-                    {s.server_id.slice(-2)} {s.temp_c}°
+                    {s.server_id.slice(-2)} {s.temp_c}° {s.cpu_pct}%
                   </div>
                 ))}
             </div>
