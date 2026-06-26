@@ -40,7 +40,7 @@ export default function AlertsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-white">System Alerts</h1>
+      <h1 className="text-2xl font-bold text-white font-playfair">System Alerts</h1>
 
       <div className="flex gap-3 flex-wrap">
         {['', 'critical', 'high', 'medium', 'low'].map(s => (
@@ -49,7 +49,7 @@ export default function AlertsPage() {
             onClick={() => setFilters(f => ({ ...f, severity: s }))}
             className={cn(
               'px-3 py-1 rounded-lg text-sm capitalize cursor-pointer transition-colors',
-              filters.severity === s ? 'bg-slate-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+              filters.severity === s ? 'bg-white/15 text-white' : 'bg-white/5 text-white/40 border border-white/10 hover:text-white hover:bg-white/10'
             )}
           >
             {s || 'All Severities'}
@@ -62,7 +62,7 @@ export default function AlertsPage() {
             onClick={() => setFilters(f => ({ ...f, resolved: val }))}
             className={cn(
               'px-3 py-1 rounded-lg text-sm cursor-pointer transition-colors',
-              filters.resolved === val ? 'bg-slate-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+              filters.resolved === val ? 'bg-white/15 text-white' : 'bg-white/5 text-white/40 border border-white/10 hover:text-white hover:bg-white/10'
             )}
           >
             {label}
@@ -70,10 +70,10 @@ export default function AlertsPage() {
         ))}
       </div>
 
-      <div className="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden">
+      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-800 text-left text-xs text-slate-500 uppercase tracking-wider">
+            <tr className="border-b border-white/10 text-left text-xs text-white/30 uppercase tracking-wider">
               <th className="px-4 py-3">Severity</th>
               <th className="px-4 py-3">Type</th>
               <th className="px-4 py-3">Server</th>
@@ -85,9 +85,9 @@ export default function AlertsPage() {
           <tbody>
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="border-b border-slate-800 animate-pulse">
+                <tr key={i} className="border-b border-white/5 animate-pulse">
                   <td colSpan={6} className="px-4 py-3">
-                    <div className="h-4 bg-slate-800 rounded" />
+                    <div className="h-4 bg-white/10 rounded" />
                   </td>
                 </tr>
               ))
@@ -96,7 +96,7 @@ export default function AlertsPage() {
                 <td colSpan={6} className="px-4 py-8 text-center text-slate-600">No alerts found</td>
               </tr>
             ) : alerts.map(alert => (
-              <tr key={alert.id} className={cn('border-b border-slate-800', alert.resolved && 'opacity-50')}>
+              <tr key={alert.id} className={cn('border-b border-white/5 hover:bg-white/3 transition-colors', alert.resolved && 'opacity-50')}>
                 <td className="px-4 py-3">
                   <span className={cn('px-2 py-0.5 rounded text-xs font-bold uppercase border', SEVERITY_STYLES[alert.severity])}>
                     {alert.severity}
@@ -112,7 +112,7 @@ export default function AlertsPage() {
                   {!alert.resolved && (
                     <button
                       onClick={() => resolve(alert.id)}
-                      className="text-xs bg-slate-700 hover:bg-slate-600 text-white px-2 py-1 rounded cursor-pointer transition-colors"
+                      className="text-xs bg-white/10 hover:bg-white/20 text-white px-2 py-1 rounded cursor-pointer transition-colors"
                     >
                       Resolve
                     </button>
