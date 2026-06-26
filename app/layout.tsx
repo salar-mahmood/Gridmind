@@ -18,6 +18,7 @@ const geistMono = localFont({
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   weight: ['700'],
+  display: 'swap',
   variable: '--font-playfair',
 })
 
