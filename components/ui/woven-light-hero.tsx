@@ -35,7 +35,7 @@ export const WovenLightHero = () => {
     }
   }, [textControls, buttonControls]);
 
-  const headline = "Woven by Light";
+  const headline = "GridMind";
 
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black dark:bg-white">
