@@ -2,10 +2,10 @@ import type { ServerTelemetry } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
 function tempColor(temp: number): string {
-  if (temp >= 75) return 'bg-red-500 text-white'
-  if (temp >= 65) return 'bg-amber-500 text-black'
-  if (temp >= 55) return 'bg-yellow-400 text-black'
-  return 'bg-emerald-500 text-white'
+  if (temp >= 75) return 'bg-red-500 text-white shadow-sm shadow-red-500/50'
+  if (temp >= 65) return 'bg-amber-500 text-black shadow-sm shadow-amber-500/50'
+  if (temp >= 55) return 'bg-yellow-400 text-black shadow-sm shadow-yellow-400/50'
+  return 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/50'
 }
 
 interface Props { servers: ServerTelemetry[] }
@@ -13,7 +13,7 @@ interface Props { servers: ServerTelemetry[] }
 export function RackHeatmap({ servers }: Props) {
   const racks = ['rack-A', 'rack-B', 'rack-C', 'rack-D']
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+    <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-4">
       <h3 className="text-sm font-medium text-slate-400 mb-3">Server Rack Heatmap</h3>
       <div className="grid grid-cols-4 gap-3">
         {racks.map(rack => (
