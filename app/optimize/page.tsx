@@ -16,7 +16,7 @@ export default function OptimizePage() {
     try {
       const res = await fetch('/api/ai/optimize', { method: 'POST' })
       const data = await res.json()
-      if (res.ok) {
+      if (res.ok && Array.isArray(data)) {
         setRecs(data)
         setLastRun(new Date())
       } else {

@@ -18,7 +18,7 @@ export function InsightFeed() {
     const load = () =>
       fetch('/api/recommendations?status=pending')
         .then(r => r.json())
-        .then(setItems)
+        .then(data => { if (Array.isArray(data)) setItems(data) })
         .catch(console.error)
     load()
     const id = setInterval(load, 30000)

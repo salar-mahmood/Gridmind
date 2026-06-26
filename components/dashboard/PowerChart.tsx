@@ -13,7 +13,7 @@ export function PowerChart() {
   useEffect(() => {
     fetch(`/api/telemetry/history?range=${range}`)
       .then(r => r.json())
-      .then(setData)
+      .then(d => { if (Array.isArray(d)) setData(d) })
       .catch(console.error)
   }, [range])
 
